@@ -695,7 +695,16 @@ $(document).ready(function () {
         success: function (resp) {
           ocultarLoading();
           if (resp.status === "ok") {
-            window.location.reload();
+            $("#modalOrigenSeguimiento").modal("hide");
+            Swal.fire({
+              icon: "success",
+              title: "Cambio realizado",
+              text: resp.message || "El enlace del comité se actualizó.",
+              confirmButtonText: "Aceptar",
+              confirmButtonColor: "#ff8400",
+            }).then(function () {
+              window.location.reload();
+            });
           } else {
             mostrarAlerta("error", resp.message || "No se pudo actualizar el enlace del comité.");
           }
