@@ -516,20 +516,30 @@ class SeguimientoModel
                 echo json_encode(['status' => 'error', 'message' => 'Elige si el seguimiento es de un comité registrado o independiente.']);
                 exit;
             }
-            if ($year === '' || !ctype_digit($year)) {
-                echo json_encode(['status' => 'error', 'message' => 'Elige el año del seguimiento.']);
-                exit;
-            }
 
-            $anioExiste = $conexion->prepare('SELECT COUNT(*) FROM comites_year WHERE year = ?');
-            $anioExiste->execute([(int) $year]);
-            if ((int) $anioExiste->fetchColumn() < 1) {
-                echo json_encode(['status' => 'error', 'message' => 'El año seleccionado no está iniciado.']);
+            $actual = $conexion->prepare('SELECT year, folio, fk_id_comite FROM seguimiento_comite WHERE id_seguimiento = ?');
+            $actual->execute([$id]);
+            $row = $actual->fetch(PDO::FETCH_ASSOC);
+            if (!$row) {
+                echo json_encode(['status' => 'error', 'message' => 'Seguimiento no encontrado']);
                 exit;
             }
 
             $comite = null;
-            if ($origen === 'registrado') {
+            $folio = $row['folio'];
+            if ($origen === 'independiente') {
+                $year = (string) $row['year'];
+            } else {
+                if ($year === '' || !ctype_digit($year)) {
+                    echo json_encode(['status' => 'error', 'message' => 'Elige el año del comité.']);
+                    exit;
+                }
+                $anioExiste = $conexion->prepare('SELECT COUNT(*) FROM comites_year WHERE year = ?');
+                $anioExiste->execute([(int) $year]);
+                if ((int) $anioExiste->fetchColumn() < 1) {
+                    echo json_encode(['status' => 'error', 'message' => 'El año seleccionado no está iniciado.']);
+                    exit;
+                }
                 if ($idComite === '' || !ctype_digit($idComite)) {
                     echo json_encode(['status' => 'error', 'message' => 'Selecciona el folio del comité.']);
                     exit;
@@ -545,19 +555,9 @@ class SeguimientoModel
                     echo json_encode(['status' => 'error', 'message' => 'El comité no corresponde al año seleccionado.']);
                     exit;
                 }
-            }
-
-            $actual = $conexion->prepare('SELECT year, folio, fk_id_comite FROM seguimiento_comite WHERE id_seguimiento = ?');
-            $actual->execute([$id]);
-            $row = $actual->fetch(PDO::FETCH_ASSOC);
-            if (!$row) {
-                echo json_encode(['status' => 'error', 'message' => 'Seguimiento no encontrado']);
-                exit;
-            }
-
-            $folio = $row['folio'];
-            if ((string) $row['year'] !== $year) {
-                $folio = $this->generarFolio($conexion, (int) $year);
+                if ((string) $row['year'] !== $year) {
+                    $folio = $this->generarFolio($conexion, (int) $year);
+                }
             }
 
             try {

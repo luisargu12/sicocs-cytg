@@ -383,8 +383,8 @@ $badgeEstatus = $estatusSeguimiento[$status] ?? $estatusSeguimiento[0];
                                     <label class="form-check-label" for="origen-independiente-modal">No, comité independiente</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-8 col-12 mt-4 d-none" id="bloque-comite-origen">
+                            <div class="row d-none" id="bloque-comite-origen">
+                                <div class="form-group col-md-8 col-12 mt-4">
                                     <label for="select-comite-origen" class="form-label">Folio del comité:</label>
                                     <select id="select-comite-origen" title="Comité">
                                         <option value="">Busca por folio</option>
@@ -392,7 +392,7 @@ $badgeEstatus = $estatusSeguimiento[$status] ?? $estatusSeguimiento[0];
                                 </div>
                                 <div class="form-group col-md-4 col-12 mt-4">
                                     <label for="select-year-origen" class="form-label">Año:</label>
-                                    <select id="select-year-origen" class="form-control" title="Año" required>
+                                    <select id="select-year-origen" class="form-control" title="Año">
                                         <?php foreach ($yearsOrigen as $year): ?>
                                             <option value="<?php echo (int) $year; ?>" <?php echo (string) $year === $anioSeguimiento ? 'selected' : ''; ?>><?php echo (int) $year; ?></option>
                                         <?php endforeach; ?>

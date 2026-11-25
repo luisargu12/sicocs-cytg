@@ -639,6 +639,7 @@ $(document).ready(function () {
     function mostrarComiteOrigen(visible) {
       if (visible) {
         $("#bloque-comite-origen").removeClass("d-none");
+        $("#select-year-origen").prop("disabled", false);
         if (!comiteOrigenSelect) {
           comiteOrigenSelect = $("#select-comite-origen").selectize({
             create: false,
@@ -650,6 +651,7 @@ $(document).ready(function () {
         llenarComitesOrigen();
       } else {
         $("#bloque-comite-origen").addClass("d-none");
+        $("#select-year-origen").val(String(anioSeguimiento)).prop("disabled", true);
         if (comiteOrigenSelect) {
           comiteOrigenSelect.clear(true);
         }
@@ -689,7 +691,7 @@ $(document).ready(function () {
           action: "editar-origen",
           id_seguimiento: id_seguimiento,
           origen: origen,
-          year: $("#select-year-origen").val(),
+          year: origen === "registrado" ? $("#select-year-origen").val() : anioSeguimiento,
           id_comite: idComite,
         },
         success: function (resp) {
