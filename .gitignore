@@ -1,0 +1,10 @@
+# Actas, imágenes y seguimientos. Siguen en el servidor y no se publican.
+/uploads/actas/
+/uploads/imagenes/
+/uploads/seguimientos/
+/uploads/seguimiento/
+
+# Credenciales de la base. El servidor ya tiene su copia.
+/config/database.php
+
+Thumbs.db
